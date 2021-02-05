@@ -1,0 +1,176 @@
+---
+title: 'CIND 123 - Data Analytics: Basic Methods'
+author: Ajay Herod
+output:  word_document
+---
+<center> <h1> Assignment 1 (10%) </h1> </center>
+<center>  <h3> Ajay Herod </h2> </center>
+<center> <h3> CIND123 D10 500764104 </h2> </center>
+---
+## Instructions 
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. Review this website for more details on using R Markdown <http://rmarkdown.rstudio.com>.
+
+Use RStudio for this assignment. Complete the assignment by inserting your R code wherever you see the string "#INSERT YOUR ANSWER HERE".
+
+When you click the **Knit** button, a document (PDF, Word, or HTML format) will be generated that includes both the assignment content as well as the output of any embedded R code chunks.
+
+Submit **both**  the rmd and generated output files. Failing to submit both files will be subject to mark deduction.
+
+## Sample Question and Solution
+
+Use `seq()` to create the vector $(1,2,3,\ldots,10)$.
+
+```{r}
+seq(1,10)
+```
+
+## Question 1
+
+a) Use the `seq()` function to create the vector $(1, 7, 13, \ldots, 61)$. Note that each term in this sequence is of the form 
+$1 + 6n$ where $n = 0, \ldots, 10$.
+
+```{r}
+seq(1, 61, by = 6)
+```
+
+b) Use `rep()` to create the vector $(2,3,4,\dots,2,3,4, \dots,2,3,4)$ in which the sequence $(2,3,4)$ is repeated 5 times.
+
+```{r}
+rep(2:4, 5)
+```
+
+c) To convert factor to number, would it be correct to use the following commands? Explain your answer.
+
+`factorVar <- factor(c(1, 6, 5.4, 3.2));as.numeric(factorVar)`
+
+```{r}
+cat("No, factorvar is used to convert categorical variables into leveled integers. In our case we simply would like the double numbers to be converted to integers. Expected Output (1, 6, 5, 3) Actual Output (1, 4, 3, 2)")
+```
+
+d) A comma-separated values file `dataset.csv` consists of missing values represented by question marks (`?`) and exclamation mark (`!`). How can you read this type of files in R?
+
+```
+Dataframe <- read.csv("Dataframe.csv", sep = ",", na.strings = c("?","!"))
+```
+
+\newpage
+## Question 2
+
+a) Compute: $$\sum_{n=10}^{100} n^3$$
+
+```{r}
+sum(seq(10:100)^3)[1] 
+
+```
+
+b) Compute: $$\sum_{n=1}^{10}\left(\frac{2^{n}}{n^2} + \frac{n^{4}}{4^{n}}\right)$$
+
+```{r}
+n <- 1:10
+sum((2^n/n^2)+(n^4/4^n))
+```
+
+c) Compute: $$\sum_{n=0}^{10} \frac{1}{(n+1)!}$$ 
+
+```{r}
+n <- 0:10
+sum(1/factorial(n+1))
+```
+
+d) Compute: $$\prod_{n=3}^{33} \left(3n + \frac{3}{\sqrt[3]{n}}\right)$$
+
+```{r}
+n <- 3:33
+prod(3*n+(3/n^(1/3)))
+```
+
+e) Explain the output of this R-command:
+`c(0:5)[NA]`
+
+```{r}
+cat("c(0:5) by it self outputs 0, 1, 2, 3, 4, 5
+c(0:5)[n] gives us the nth number in the vector
+c(0:5)[NA] gives us NA NA NA NA NA NA
+This is because we are asking R to find the NAth number in the sequence. This makes no sense and instead R returns NA for each number in the vector")
+```
+
+f) What is the difference between is.vector() and is.numeric() functions?
+
+```{r}
+cat("is.vector tests if the argument is a vector or not and returns TRUE or False. I.E. Numeric, Character or Logical
+is.numeric tests if the argument is numeric or not and returns True or False. I.E. double or integer")
+```
+
+g) List at least three advantages and three disadvantages of using `RShiny` package?
+```{r}
+cat("Rshiny package provides a web framework for building web applications using R
+The pros are Data Visualization, Open Source and Users just need to learn the basic R knowledge
+The cons are Poor support for high concurrency, Not so flexible for professional web developer, Less support for distributed computing")
+```
+
+\newpage
+## Question 3
+`iris` dataset gives the measurements in centimeters of the variables sepal length, sepal width, petal length and petal width, respectively, for 50 flowers from each of 3 species of iris. The species are Iris setosa, versicolor, and virginica.
+
+Install the `iris` dataset on your computer using the command `install.packages("datasets")`. Then, load the `datasets` package into your session using the following command.
+```{r}
+library(datasets)
+```
+
+a) Display the first six rows of the `iris` data set.
+
+```{r}
+head(iris)
+```
+
+b) Compute the average of the first four variables (Sepal.Length, Sepal.Width, Petal.Length and Petal.Width) using `sapply()` function.
+
+Hint: You might need to consider removing the `NA` values, otherwise the average will not be computed.
+
+```{r}
+sapply(iris[,-5] ,mean ,rm = NA)
+```
+
+c) Show how to use R to replace the missing values in this dataset with plausible ones.
+
+```{r}
+iris[is.na(iris)] <- 0
+```
+
+d) Compute the standard deviation for only the first and the third variables (Sepal.Length and Petal.Length)
+
+```{r}
+sd(iris$Sepal.Length)
+sd(iris$Petal.Length)
+```
+
+e) Construct a boxplot for `Sepal.Width` variable, then display the values of all the outliers. Explain how these outliers have been calculated.
+
+```{r}
+boxplot(Sepal.Width~Species,data = iris)
+out <- boxplot.stats(iris$Sepal.Width)$out
+out_ind <- which(iris$Sepal.Width %in% c(out))
+iris[out_ind, ]
+cat("The outliers are calcutlated using the interquartile range. The Sepal.Width above the q0.75+1.5*IQR or below the q0.25-1.5*IQR are considered outliers. THey can be identified by using the boxplot.stats(iris$Sepal.Width)$out.
+Then found using which(iris$Sepal.Width %in% c(out)) and displayed by using iris[out_ind, ].")
+```
+
+f) Compute the upper quartile of the `Sepal.Width` variable with two different methods.
+
+```{r}
+summary(iris$Sepal.Width)
+quantile(iris$Sepal.Width, .75)
+
+```
+
+g) Construct a pie chart to describe the species with 'Sepal.Length' less than 7 centimeters.
+```{r}
+sepalLength <- subset(iris, iris$Sepal.Length < 7)
+mytable <- table(sepalLength$Species)
+lbls <- paste(names(mytable), "\n", mytable, sep="")
+pie(mytable, labels = lbls,
+  main="Pie Chart of Species\n and Sepal length < 7")
+```
+
+END of Assignment #1.
